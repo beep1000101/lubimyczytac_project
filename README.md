@@ -1,2 +1,2 @@
 # lubimyczytac_project
-project
+project lubimy czytac
