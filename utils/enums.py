@@ -19,3 +19,4 @@ class BOOKS(StrEnum):
     Enum for book-related CSS classes.
     """
     BOOK_CLASS = 'authorAllBooks__singleTextTitle float-left'
+    HREF = 'href'
