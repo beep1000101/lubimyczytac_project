@@ -6,4 +6,8 @@ class URLS(StrEnum):
 
 class SOUP(StrEnum):
     HTML_PARSER = 'html.parser'
+    ANCHOR = 'a'
+
+class BOOKS(StrEnum):
+    BOOK_CLASS = 'authorAllBooks__singleTextTitle float-left'
     
