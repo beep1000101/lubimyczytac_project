@@ -1,4 +1,5 @@
 {
     "base_url": "https://lubimyczytac.pl",
-    "page_url": "https://lubimyczytac.pl/katalog/ksiazki?page={step}&listId=booksFilteredList&rating[]=0&rating[]=10&publishedYear[]=1200&publishedYear[]=2025&bookType=1&catalogSortBy=ratings-desc&paginatorType=Standard"
+    "page_url": "https://lubimyczytac.pl/katalog/ksiazki?page={step}&listId=booksFilteredList&rating[]=0&rating[]=10&publishedYear[]=1200&publishedYear[]=2025&bookType=1&catalogSortBy=ratings-desc&paginatorType=Standard",
+    "page_url_additional": "https://lubimyczytac.pl/katalog/ksiazki?page={step}&listId=booksFilteredList&rating[]=0&rating[]=10&publishedYear[]=1200&publishedYear[]=2010&bookType=1&catalogSortBy=ratings-desc&paginatorType=Standard"
 }
