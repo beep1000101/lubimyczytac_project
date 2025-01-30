@@ -10,11 +10,18 @@ def show_data_exploration():
     st.title("Eksploracja Danych")
 
     st.markdown("""
-    W tej sekcji wykonamy analizę eksploracyjną danych, aby lepiej zrozumieć, jakie informacje można uzyskać z dostępnych zbiorów danych o książkach oraz autorach.
+    W tej sekcji dokonamy analizy eksploracyjnej danych, aby lepiej zrozumieć informacje, które możemy wyciągnąć z dostępnych zbiorów danych o książkach oraz autorach. 
 
-    - Sprawdzimy rozkład ocen książek.
-    - Zobaczymy zależności między liczbą osób, które posiadają książkę a jej oceną.
-    - Zobaczymy rozkład liczby stron w książkach w zależności od kategorii.
+    Zaczniemy od analizy **rozkładu ocen książek**, aby zobaczyć, jak użytkownicy oceniają książki na platformie. Następnie przyjrzymy się **zależności między liczbą osób, które posiadają książkę, a jej oceną**, aby zrozumieć, jak popularność książek może wpływać na ich oceny.
+
+    Kolejnym krokiem będzie **rozważenie rozkładu liczby stron w książkach w zależności od kategorii**. Dzięki temu będziemy mogli zobaczyć, jak różne kategorie książek różnią się pod względem liczby stron.
+
+    Na koniec, zaprezentujemy wyniki analizy **UMAP 3D**, które pomogą zobrazować książki klasyfikowane jako **bestsellery** oraz **nie-bestsellery** w przestrzeni 3D. Dodatkowo, zobaczymy wyniki **UMAP dla grup klastrów**, które pokazują, jak książki są pogrupowane w różne klastry w zależności od ich cech.
+
+    - Sprawdzimy **rozklad ocen książek**.
+    - Zobaczymy zależności **między liczbą osób, które posiadają książkę a jej oceną**.
+    - Zbadamy **rozkład liczby stron w książkach w zależności od kategorii**.
+    - Zobaczymy **wyniki analizy UMAP dla bestsellerów i nie-bestsellerów oraz klastrów książek**.
     """)
 
     try:
@@ -30,6 +37,9 @@ def show_data_exploration():
         show_umap_plot(umap_bestseller_df, title=bestseller_title)
 
         st.header('Pogrupowane Klastry')
+        st.markdown("""
+        Grupowanie książek w klastry medodą KNN.
+        """)
         cluster_title = "UMAP 3D - Klastry"
         show_umap_plot(umap_clusters_df, title=cluster_title)
 

@@ -1,11 +1,8 @@
 import streamlit as st
-import requests
-from bs4 import BeautifulSoup
-import time
-import random
+
 
 def show_data_acquisition():
-    st.title("Data Acquisition")
+    st.title("Pozyskiwanie danych")
 
     st.markdown("""
     ## Jak pozyskiwałem dane?
