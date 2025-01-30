@@ -1,9 +1,10 @@
 import streamlit as st
 import matplotlib.pyplot as plt
+import plotly.express as px
 import seaborn as sns
 import pandas as pd
 
-from utils.paths import BOOKS_PATH
+from utils.paths import BOOKS_PATH, UMAP_BESTSELLERS_PATH, UMAP_CLUSTERS_PATH
 
 def show_data_exploration():
     st.title("Eksploracja Danych")
@@ -18,9 +19,19 @@ def show_data_exploration():
 
     try:
         books_df = pd.read_csv(BOOKS_PATH)
-
+        umap_bestseller_df = pd.read_csv(UMAP_BESTSELLERS_PATH)
+        umap_clusters_df = pd.read_csv(UMAP_CLUSTERS_PATH)
+        st.header('Rozkłady jądrowe liczby stron w książkach w zależności od kategorii')
         # Wywołanie funkcji do rysowania wykresu KDE dla liczby stron w zależności od kategorii
         show_number_of_pages_based_on_category(books_df)
+
+        st.header('Wykres UMAP 3D dla klas Bestsellery i Nie-Bestsellery')
+        bestseller_title = "UMAP 3D - Bestsellery"
+        show_umap_plot(umap_bestseller_df, title=bestseller_title)
+
+        st.header('Pogrupowane Klastry')
+        cluster_title = "UMAP 3D - Klastry"
+        show_umap_plot(umap_clusters_df, title=cluster_title)
 
     except Exception as e:
         st.error(f"Error loading data: {e}")
@@ -57,3 +68,16 @@ def show_number_of_pages_based_on_category(books_df):
         st.pyplot(fig)  # Przekazujemy obiekt figury do st.pyplot()
     else:
         st.warning("Proszę wybrać przynajmniej jedną kategorię.")
+
+def show_umap_plot(umap_df, title="UMAP 3D"):
+    target_col = umap_df.columns[-1]
+    # Tworzenie wykresu 3D UMAP
+    fig = px.scatter_3d(umap_df, x="UMAP1", y="UMAP2", z="UMAP3", 
+                        color=umap_df.iloc[:, -1].astype(str),
+                        title=title,
+                        labels={"color": target_col},
+                        opacity=0.7)
+    fig.update_layout(width=800, height=600)
+
+    # Wyświetlanie wykresu w Streamlit
+    st.plotly_chart(fig)
