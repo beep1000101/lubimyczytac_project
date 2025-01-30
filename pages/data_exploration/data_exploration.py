@@ -29,7 +29,7 @@ def show_data_exploration():
         umap_bestseller_df = pd.read_csv(UMAP_BESTSELLERS_PATH)
         umap_clusters_df = pd.read_csv(UMAP_CLUSTERS_PATH)
         st.header('Rozkłady jądrowe liczby stron w książkach w zależności od kategorii')
-        # Wywołanie funkcji do rysowania wykresu KDE dla liczby stron w zależności od kategorii
+        
         show_number_of_pages_based_on_category(books_df)
 
         st.header('Wykres UMAP 3D dla klas Bestsellery i Nie-Bestsellery')
@@ -47,26 +47,26 @@ def show_data_exploration():
         st.error(f"Error loading data: {e}")
 
 def show_number_of_pages_based_on_category(books_df):
-    # Usuwamy brakujące dane w kolumnach 'Kategoria' i 'Liczba stron'
+    
     plot_data = books_df.dropna(subset=['Kategoria', 'Liczba stron'])
 
-    # Filtrowanie kategorii, które mają więcej niż 0 książek
+    
     filtered_categories_number = plot_data['Kategoria'].value_counts()
     filtered_categories = filtered_categories_number[filtered_categories_number > 0].index
 
-    # Wybór kategorii przez użytkownika
+    
     selected_categories = st.multiselect(
         "Wybierz kategorie książek do wyświetlenia:",
         options=filtered_categories,
-        default=filtered_categories[:3]  # Domyślnie wyświetlamy pierwsze 3 kategorie
+        default=filtered_categories[:3]
     )
 
     if selected_categories:
-        # Filtrujemy dane dla wybranych kategorii
+
         plot_data_filtered = plot_data[plot_data['Kategoria'].isin(selected_categories)]
 
-        # Rysowanie wykresu KDE dla każdej z wybranych kategorii
-        fig, ax = plt.subplots(figsize=(15, 10))  # Tworzymy obiekt figury i osi
+
+        fig, ax = plt.subplots(figsize=(15, 10))
         for category in selected_categories:
             subset = plot_data_filtered[plot_data_filtered['Kategoria'] == category]
             sns.kdeplot(subset['Liczba stron'], ax=ax, label=category, fill=True, alpha=0.5)
@@ -75,13 +75,12 @@ def show_number_of_pages_based_on_category(books_df):
         ax.set_xlabel('Liczba stron')
         ax.set_ylabel('Gęstość')
         ax.legend()
-        st.pyplot(fig)  # Przekazujemy obiekt figury do st.pyplot()
+        st.pyplot(fig)
     else:
         st.warning("Proszę wybrać przynajmniej jedną kategorię.")
 
 def show_umap_plot(umap_df, title="UMAP 3D"):
     target_col = umap_df.columns[-1]
-    # Tworzenie wykresu 3D UMAP
     fig = px.scatter_3d(umap_df, x="UMAP1", y="UMAP2", z="UMAP3", 
                         color=umap_df.iloc[:, -1].astype(str),
                         title=title,
@@ -89,5 +88,4 @@ def show_umap_plot(umap_df, title="UMAP 3D"):
                         opacity=0.7)
     fig.update_layout(width=800, height=600)
 
-    # Wyświetlanie wykresu w Streamlit
     st.plotly_chart(fig)
