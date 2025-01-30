@@ -6,11 +6,12 @@ from pages.data_sourcing import data_sourcing
 from pages.data_exploration import data_exploration
 from pages.modeling import modeling
 from pages.results import results
+from pages.reccomend import reccomend
 
 def app():
     st.sidebar.title("Navigation")
     st.sidebar.markdown("Select a section:")
-    section = st.sidebar.radio("Sections", ["Home", "Data Acquisition", "Data Exploration", "Modeling", 'Results'])
+    section = st.sidebar.radio("Sections", ["Home", "Data Acquisition", "Data Exploration", "Modeling", 'Results', 'Recommend'])
 
     if section == "Home":
         home.show_home()
@@ -28,6 +29,8 @@ def app():
         modeling.show_modeling()
     elif section == "Results":
         results.show_model_results()
+    elif section == "Recommend":
+        reccomend.show_random_books()
 
 if __name__ == "__main__":
     app()
