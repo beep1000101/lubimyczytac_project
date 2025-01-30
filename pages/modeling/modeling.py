@@ -162,6 +162,7 @@ def show_knn():
     Pipeline dla **K-Nearest Neighbors** wyglądał następująco:
 
     ```python
+    X_train_knn, X_test_knn, y_train_knn, y_test_knn = train_test_split(X_knn, y_knn, test_size=0.3, random_state=20010911)
     # Parametry do strojenia modelu KNN
     knn_param_grid = {
         'feature_selection__k': [8, 9, 10],
