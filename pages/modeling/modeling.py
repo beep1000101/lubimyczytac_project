@@ -19,26 +19,15 @@ def show_logistic_regression():
     st.markdown("""
     Do klasyfikacji wybrano **regresję logistyczną**, jako model, który najlepiej maksymalizował **Recall**. Taki wybór był kluczowy, ponieważ zależało mi na wykrywaniu jak największej liczby bestsellerów. Regresja logistyczna okazała się wyjątkowo skuteczna w tym przypadku.
 
-    - **Strojenie hiperparametrów**: Za pomocą **RandomizedSearchCV** zoptymalizowałem parametry modelu, co pozwoliło uzyskać wysoką jakość klasyfikacji.
+    - **Strojenie hiperparametrów**: Za pomocą **RandomizedSearchCV** zoptymalizowano parametry modelu, co pozwoliło uzyskać wysoką jakość klasyfikacji.
     - **Selekcja cech**: Skupiliśmy się na cechach, które miały największy wpływ na predykcję bestsellerów, takich jak oceny użytkowników, liczba opinii czy dane dotyczące autorów.
     
     ## Pipeline dla regresji logistycznej
     Pipeline dla regresji logistycznej wyglądał następująco:
 
     ```python
-    ...
-    # X columns: Index(['author_average_rating', 'author_number_of_people_read',
-    #    'author_number_of_people_wants_to_read', 'author_number_of_fans',
-    #    'author_number_of_books_written', 'author_number_of_awards',
-    #    'number_of_pages', 'category', 'part_of_cycle', 'language', 'format',
-    #    'description_length', 'mean_rating', 'std_rating', 'skewness',
-    #    'kurtosis'],
-    #   dtype='object')
-    # y columns: bestseller
-    
+    # Selekcja cech oraz regresja logistyczna
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=80085666)
-                
-    
     number_of_features = X_train.shape[1]
     param_dist = [
         {"classifier__C": loguniform(1e-4, 10), 
@@ -64,36 +53,33 @@ def show_logistic_regression():
     )
 
     randomized_log_reg.fit(X_train, y_train)
-    
-    # Best parameters for logistic regression classifier:
-    # {'classifier__C': np.float64(4.036589405322333),
-    # 'classifier__penalty': 'l1',
-    # 'classifier__solver': 'liblinear',
-    # 'feature_selection__k': np.int64(16)}
-    # Best score for logistic regression classifier:
-    # ['author_average_rating',
-    # 'author_number_of_people_read',
-    # 'author_number_of_people_wants_to_read',
-    # 'author_number_of_fans',
-    # 'author_number_of_books_written',
-    # 'author_number_of_awards',
-    # 'number_of_pages',
-    # 'category',
-    # 'part_of_cycle',
-    # 'language',
-    # 'format',
-    # 'description_length',
-    # 'mean_rating',
-    # 'std_rating',
-    # 'skewness',
-    # 'kurtosis']
-    ...
     ```
-    - **Selekcja cech**: Zastosowano **SelectKBest** z funkcją **mutual_info_classif** do selekcji najlepszych cech, które miały największy wpływ na klasyfikację.
-    - **Regresja logistyczna**: Model klasyfikacyjny z **LogisticRegression**, który był strożony pod kątem najlepszych parametrów.
+
+    - **Najlepsze parametry**:
+    ```python
+    best_params = {
+        'classifier__C': np.float64(4.036589405322333),
+        'classifier__penalty': 'l1',
+        'classifier__solver': 'liblinear',
+        'feature_selection__k': np.int64(16)
+    }
+    ```
+
+    - **Wybrane cechy**:
+    ```python
+    best_features = [
+        'author_average_rating', 'author_number_of_people_read', 'author_number_of_people_wants_to_read',
+        'author_number_of_fans', 'author_number_of_books_written', 'author_number_of_awards',
+        'number_of_pages', 'category', 'part_of_cycle', 'language', 'format', 'description_length',
+        'mean_rating', 'std_rating', 'skewness', 'kurtosis'
+    ]
+    ```
+
+    Regresja logistyczna osiągnęła najlepsze wyniki klasyfikacyjne przy tych parametrach oraz cechach, które miały największy wpływ na rozróżnienie książek z potencjałem komercyjnym.
 
     """)
 
+# Funkcja dla modelu Random Forest
 def show_random_forest():
     st.header("Random Forest")
 
@@ -107,18 +93,8 @@ def show_random_forest():
     Pipeline dla **Random Forest** wyglądał następująco:
 
     ```python
-    ...
-    # X columns for random forest: Index(['author_average_rating', 'author_number_of_people_read',
-    #    'author_number_of_people_wants_to_read', 'author_number_of_fans',
-    #    'author_number_of_books_written', 'author_number_of_awards',
-    #    'number_of_pages', 'category', 'part_of_cycle', 'language', 'format',
-    #    'description_length'],
-    #   dtype='object')
-    # y columns for random forrest: bestseller
-    
-    X_train_forest, X_test_forest, y_train_forest, y_test_forest = train_test_split(X_forest, y_forest, test_size=0.3, random_state=80085666)            
-    
-    # Definicja parametryzacji dla Random Forest
+    # Parametry do strojenia modelu Random Forest
+    X_train_forest, X_test_forest, y_train_forest, y_test_forest = train_test_split(X_forest, y_forest, test_size=0.3, random_state=80085666)
     random_forrest_param_grid = {
         "classifier__n_estimators": np.arange(150, 500, 20),
         "classifier__min_samples_split": np.arange(1, 30, 2),
@@ -128,9 +104,7 @@ def show_random_forest():
 
     # Pipeline dla Random Forest
     random_forrest_pipeline = Pipeline([
-        ('classifier',
-         RandomForestClassifier(class_weight='balanced',
-         random_state=np.random.seed(911))),
+        ('classifier', RandomForestClassifier(class_weight='balanced', random_state=np.random.seed(911))),
     ])
 
     # Strojenie hiperparametrów przy użyciu RandomizedSearchCV
@@ -143,22 +117,37 @@ def show_random_forest():
         verbose=2
     )
 
-    # Trenowanie modelu
     random_forrest_grid.fit(X_train_forest, y_train_forest)
-    
-    # Best parameters for random forest classifier:
-    # {'classifier__n_estimators': np.int64(470),
-    # 'classifier__min_samples_split': np.int64(5),
-    # 'classifier__min_samples_leaf': np.int64(7),
-    # 'classifier__max_depth': np.int64(33)}
-    ...
     ```
 
-    W tym przypadku:
-    - **Selekcja parametrów**: Zoptymalizowano kluczowe parametry, takie jak liczba drzew, głębokość drzew, minimalna liczba próbek do podziału, minimalna liczba próbek w liściu.
-    - **RandomizedSearchCV**: Użyto **RandomizedSearchCV** do wyszukiwania najlepszych hiperparametrów dla modelu **Random Forest**.
-    """)
+    - **Najlepsze parametry**:
+    ```python
+    best_params = {
+        'classifier__n_estimators': 470,
+        'classifier__min_samples_split': 5,
+        'classifier__min_samples_leaf': 7,
+        'classifier__max_depth': 33
+    }
+    ```
+    - **Wybrane cechy**:
+    ```python
+        best_features = ['author_average_rating',
+    'author_number_of_people_read',
+    'author_number_of_people_wants_to_read',
+    'author_number_of_fans',
+    'author_number_of_books_written',
+    'author_number_of_awards',
+    'number_of_pages',
+    'category',
+    'part_of_cycle',
+    'language',
+    'format',
+    'description_length']
+    ```
 
+    Random Forest osiągnął doskonałe wyniki klasyfikacyjne dzięki odpowiednim wartościom hiperparametrów, jak liczba drzew czy głębokość drzew.
+
+    """)
 
 def show_knn():
     st.header("K-Nearest Neighbors (KNN)")
@@ -220,8 +209,20 @@ def show_knn():
         'knn__algorithm': 'auto'
     }
     ```
+    - **Wybrane cechy**:
+    ```python
+    best_features = [
+        'rating_3',
+        'rating_4',
+        'rating_5',
+        'rating_6',
+        'rating_7',
+        'rating_8',
+        'rating_9',
+        'rating_10'
+    ]
+    ```
 
     Te parametry zapewniły najlepszą jakość klasyfikacji w zadaniu, uzyskując dobrą równowagę między szybkością treningu a dokładnością klasyfikacji.
     """)
-
 
