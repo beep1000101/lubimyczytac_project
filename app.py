@@ -5,11 +5,12 @@ from pages.home import home
 from pages.data_sourcing import data_sourcing
 from pages.data_exploration import data_exploration
 from pages.modeling import modeling
+from pages.results import results
 
 def app():
     st.sidebar.title("Navigation")
     st.sidebar.markdown("Select a section:")
-    section = st.sidebar.radio("Sections", ["Home", "Data Acquisition", "Data Exploration", "Modeling"])
+    section = st.sidebar.radio("Sections", ["Home", "Data Acquisition", "Data Exploration", "Modeling", 'Results'])
 
     if section == "Home":
         home.show_home()
@@ -25,6 +26,8 @@ def app():
         data_exploration.show_data_exploration()
     elif section == "Modeling":
         modeling.show_modeling()
+    elif section == "Results":
+        results.show_model_results()
 
 if __name__ == "__main__":
     app()
