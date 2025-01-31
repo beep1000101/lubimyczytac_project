@@ -33,5 +33,3 @@ To eksperyment **data science end-to-end**, który obejmuje cały proces od pozy
 ## Środowisko
 
 Projekt testowany na **Fedora 41** z Python 3.13.
-
-Projekt używa bibliotek takich jak `joblib`, `pandas`, `scikit-learn` i `streamlit`.
