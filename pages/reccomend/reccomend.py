@@ -31,9 +31,12 @@ def predict_books(models, books_df, test_features, y_test):
     underrated_books_knn = books_df.loc[y_test_knn.index[((y_test_knn == 0).T & (knn_pred_series == 1)).T]]
 
     # Sortowanie książek po liczbie osób, które ją posiadają
-    underrated_books_logreg_sorted = underrated_books_logreg.sort_values('number_of_people_has', ascending=False).head(20)
-    underrated_books_rf_sorted = underrated_books_rf.sort_values('number_of_people_has', ascending=False).head(20)
-    underrated_books_knn_sorted = underrated_books_knn.sort_values('number_of_people_has', ascending=False).head(20)
+    legrog_cap = min(underrated_books_logreg.shape[0], 20)
+    rf_cap = min(underrated_books_rf.shape[0], 20)
+    knn_cap = min(underrated_books_knn.shape[0], 20)
+    underrated_books_logreg_sorted = underrated_books_logreg.sample(legrog_cap)
+    underrated_books_rf_sorted = underrated_books_rf.sample(rf_cap)
+    underrated_books_knn_sorted = underrated_books_knn.sample(knn_cap)
 
     return underrated_books_logreg_sorted, underrated_books_rf_sorted, underrated_books_knn_sorted
 
