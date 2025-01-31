@@ -98,6 +98,6 @@ def show_umap_plot(umap_df, label, title="UMAP 3D"):
         opacity=0.7,
         color_continuous_scale=px.colors.sequential.Sunsetdark
     )
-    fig.update_layout(width=960, height=720)
+    fig.update_layout(width=1280, height=860)
 
     st.plotly_chart(fig)
