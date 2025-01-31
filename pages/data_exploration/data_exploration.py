@@ -4,6 +4,8 @@ import plotly.express as px
 import seaborn as sns
 import pandas as pd
 
+import numpy as np
+
 from utils.paths import BOOKS_PATH, UMAP_BESTSELLERS_PATH, UMAP_CLUSTERS_PATH
 
 def show_data_exploration():
@@ -38,14 +40,14 @@ def show_data_exploration():
 
         st.header('Wykres UMAP 3D dla klas Bestsellery i Nie-Bestsellery')
         bestseller_title = "UMAP 3D - Bestsellery"
-        show_umap_plot(umap_bestseller_df, title=bestseller_title)
+        show_umap_plot(umap_bestseller_df, label='Bestseller', title=bestseller_title)
 
         st.header('Pogrupowane Klastry')
         st.markdown("""
         Grupowanie książek w klastry medodą KNN.
         """)
         cluster_title = "UMAP 3D - Klastry"
-        show_umap_plot(umap_clusters_df, title=cluster_title)
+        show_umap_plot(umap_clusters_df,label='Clusters',  title=cluster_title)
 
     except Exception as e:
         st.error(f"Error loading data: {e}")
@@ -83,13 +85,18 @@ def show_number_of_pages_based_on_category(books_df):
     else:
         st.warning("Proszę wybrać przynajmniej jedną kategorię.")
 
-def show_umap_plot(umap_df, title="UMAP 3D"):
-    target_col = umap_df.columns[-1]
-    fig = px.scatter_3d(umap_df, x="UMAP1", y="UMAP2", z="UMAP3", 
-                        color=umap_df.iloc[:, -1].astype(str),
-                        title=title,
-                        labels={"color": target_col},
-                        opacity=0.7)
-    fig.update_layout(width=800, height=600)
+def show_umap_plot(umap_df, label, title="UMAP 3D"):
+    colours = umap_df.iloc[:, -1].astype(str)
+    fig = px.scatter_3d(
+        umap_df, 
+        x="UMAP1", 
+        y="UMAP2", 
+        z="UMAP3", 
+        color=colours,
+        title=title,
+        labels={"color": label},
+        opacity=0.7,
+    )
+    fig.update_layout(width=960, height=720)
 
     st.plotly_chart(fig)
