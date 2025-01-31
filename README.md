@@ -14,20 +14,30 @@ To eksperyment **data science end-to-end**, który obejmuje cały proces od pozy
      ```bash
      python3.13 -m venv venv
      ```
+   
+2. **Aktywacja wirtualnego środowiska**:
+   - **Windows (PowerShell)**:
+     ```powershell
+     .\venv\Scripts\Activate.ps1
+     ```
+   - **Linux / macOS**:
+     ```bash
+     source venv/bin/activate
+     ```
 
-2. **Instalacja wymaganych bibliotek**:
+3. **Instalacja wymaganych bibliotek**:
    - Zainstaluj wymagane biblioteki za pomocą `pip`:
      ```bash
      pip install -r requirements.txt
      ```
 
-3. **Uruchomienie aplikacji**:
+4. **Uruchomienie aplikacji**:
    - Po zainstalowaniu wymaganych pakietów uruchom aplikację:
      ```bash
      streamlit run app.py
      ```
 
-4. **Przygotowanie danych i modeli**:
+5. **Przygotowanie danych i modeli**:
    - Upewnij się, że odpowiednie pliki z danymi i modelami `.pkl` są dostępne w odpowiednich folderach, zgodnie z instrukcjami w kodzie.
 
 ## Środowisko
