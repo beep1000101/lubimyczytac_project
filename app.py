@@ -8,6 +8,14 @@ from pages.modeling import modeling
 from pages.results import results
 from pages.reccomend import reccomend
 
+# Set the page configuration
+st.set_page_config(
+    page_title="Lubimyczytac Dashboard",
+    page_icon="📚",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
 def app():
     st.sidebar.title("Navigation")
     st.sidebar.markdown("Select a section:")

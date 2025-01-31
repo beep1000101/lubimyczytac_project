@@ -28,7 +28,7 @@ def show_model_results():
     - **False Negative (FN)**: 22
     - **True Positive (TP)**: 125
 
-    Z powyższego wynika, że model **Regresji Logistycznej** dobrze klasyfikuje książki o niskim potencjale komercyjnym (wysoka liczba **TN**), ale ma pewne trudności z wykrywaniem książek z potencjałem komercyjnym (**TP**). Błąd w klasyfikacji bestsellerów (czyli **FP** i **FN**) jest zauważalny, ale nie jest to model, który drastycznie popełnia błędy. Warto podkreślić, że ten model jest dobrym wyborem, gdy zależy nam na minimalizowaniu błędów w klasyfikacji książek o niskim potencjale (gdzie **TN** ma znaczenie).
+    Z powyższego wynika, że model **Regresji Logistycznej** okazał się najlepszy, ponieważ najlepiej maksymalizował **Recall**, co było kluczowe w wykrywaniu książek z potencjałem komercyjnym. Choć model dobrze klasyfikuje książki o niskim potencjale (wysoka liczba **True Negatives**), wykazuje pewne trudności w wykrywaniu bestsellerów (co objawia się błędami w postaci **False Positives** i **False Negatives**). Niemniej jednak, regresja logistyczna pozostaje solidnym wyborem, szczególnie gdy zależy nam na wykrywaniu książek z potencjałem przy minimalnym ryzyku błędów klasyfikacji książek o niskim potencjale.
     """)    
             
     ### Random Forest
