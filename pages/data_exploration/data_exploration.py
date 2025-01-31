@@ -28,6 +28,10 @@ def show_data_exploration():
         books_df = pd.read_csv(BOOKS_PATH)
         umap_bestseller_df = pd.read_csv(UMAP_BESTSELLERS_PATH)
         umap_clusters_df = pd.read_csv(UMAP_CLUSTERS_PATH)
+
+        st.header('Macierz Korelacji Danych na Temat Posiadania Książki')
+        st.image('data/pics/correlation_ownership.png')
+
         st.header('Rozkłady jądrowe liczby stron w książkach w zależności od kategorii')
         
         show_number_of_pages_based_on_category(books_df)
