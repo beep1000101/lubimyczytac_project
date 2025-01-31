@@ -16,13 +16,19 @@ def predict_books(models, books_df, test_features, y_test):
 
     # Predykcje dla każdego modelu
     log_reg_preds = log_reg.predict(X_logreg)
+    log_reg_pred_series = pd.Series(log_reg_preds, index=X_logreg.index)
     rf_preds = random_forest.predict(X_forrest)
+    rf_pred_series = pd.Series(rf_preds, index=X_forrest.index)
     knn_preds = knn.predict(X_knn)
+    knn_pred_series = pd.Series(knn_preds, index=X_knn.index)
 
     # Filtrowanie książek, które są klasyfikowane jako niedocenione (model przewiduje je jako bestseller, ale y == 0)
-    underrated_books_logreg = books_df[(y_test == 0) & (log_reg_preds == 1)]
-    underrated_books_rf = books_df[(y_test == 0) & (rf_preds == 1)]
-    underrated_books_knn = books_df[(y_test == 0) & (knn_preds == 1)]
+    y_test_log_reg = y_test.loc[X_logreg.index, 'bestseller']
+    y_test_rf = y_test.loc[X_forrest.index, 'bestseller']
+    y_test_knn = y_test.loc[X_knn.index, 'bestseller']
+    underrated_books_logreg = books_df.loc[y_test_log_reg.index[((y_test_log_reg == 0).T & (log_reg_pred_series == 1)).T]]
+    underrated_books_rf = books_df.loc[y_test_rf.index[((y_test_rf == 0).T & (rf_pred_series == 1)).T]]
+    underrated_books_knn = books_df.loc[y_test_knn.index[((y_test_knn == 0).T & (knn_pred_series == 1)).T]]
 
     # Sortowanie książek po liczbie osób, które ją posiadają
     underrated_books_logreg_sorted = underrated_books_logreg.sort_values('number_of_people_has', ascending=False).head(20)
@@ -32,9 +38,9 @@ def predict_books(models, books_df, test_features, y_test):
     return underrated_books_logreg_sorted, underrated_books_rf_sorted, underrated_books_knn_sorted
 
 def load_features():
-    X_test_logreg = pd.read_csv('data/models/X_test.csv')
-    X_test_forrest = pd.read_csv('data/models/X_test_forrest.csv')
-    X_test_knn = pd.read_csv('data/models/X_test_knn.csv')
+    X_test_logreg = pd.read_csv('data/models/X_test.csv', index_col=0)
+    X_test_forrest = pd.read_csv('data/models/X_test_forrest.csv', index_col=0)
+    X_test_knn = pd.read_csv('data/models/X_test_knn.csv', index_col=0)
 
     return X_test_logreg, X_test_forrest, X_test_knn
 
@@ -53,7 +59,7 @@ def show_random_books():
 
     # Zakładając, że masz odpowiednią zmienną `y_test` (czy książka to bestseller czy nie)
     # Jeśli nie masz jej w zbiorze, musisz to przygotować wcześniej
-    y_test = pd.read_csv('data/models/y_bestsellers.csv')
+    y_test = pd.read_csv('data/models/y_bestsellers.csv', index_col=0)
 
 
     # Losowanie książek dla każdego modelu
