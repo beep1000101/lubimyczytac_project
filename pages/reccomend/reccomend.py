@@ -10,7 +10,8 @@ def load_models():
     return log_reg, random_forest, knn
 
 # Funkcja do predykcji na zbiorze testowym
-def predict_books(models, books_df, test_features, y_test):
+def predict_books(models, books_df, test_features, y_test, number_of_books=10):
+
     log_reg, random_forest, knn = models
     X_logreg, X_forrest, X_knn = test_features
 
@@ -31,9 +32,9 @@ def predict_books(models, books_df, test_features, y_test):
     underrated_books_knn = books_df.loc[y_test_knn.index[((y_test_knn == 0).T & (knn_pred_series == 1)).T]]
 
     # Sortowanie książek po liczbie osób, które ją posiadają
-    legrog_cap = min(underrated_books_logreg.shape[0], 20)
-    rf_cap = min(underrated_books_rf.shape[0], 20)
-    knn_cap = min(underrated_books_knn.shape[0], 20)
+    legrog_cap = min(underrated_books_logreg.shape[0], number_of_books)
+    rf_cap = min(underrated_books_rf.shape[0], number_of_books)
+    knn_cap = min(underrated_books_knn.shape[0], number_of_books)
     underrated_books_logreg_sorted = underrated_books_logreg.sample(legrog_cap)
     underrated_books_rf_sorted = underrated_books_rf.sample(rf_cap)
     underrated_books_knn_sorted = underrated_books_knn.sample(knn_cap)
@@ -68,15 +69,17 @@ def show_random_books():
     # Losowanie książek dla każdego modelu
     random_logreg_books, random_rf_books, random_knn_books = predict_books(models, books_df, test_features, y_test)
 
+    columns_to_show = ['title', 'author', 'number_of_people_has', 'description', 'ISBN']
+
     # Wyświetlanie losowo wybranych książek dla każdego modelu
     st.subheader("Losowe książki według modelu Regresji Logistycznej")
-    st.write(random_logreg_books[['title', 'author', 'number_of_people_has']])
+    st.write(random_logreg_books[columns_to_show])
 
     st.subheader("Losowe książki według modelu Random Forest")
-    st.write(random_rf_books[['title', 'author', 'number_of_people_has']])
+    st.write(random_rf_books[columns_to_show])
 
     st.subheader("Losowe książki według modelu KNN")
-    st.write(random_knn_books[['title', 'author', 'number_of_people_has']])
+    st.write(random_knn_books[columns_to_show])
 
 if __name__ == "__main__":
     show_random_books()
