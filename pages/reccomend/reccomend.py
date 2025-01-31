@@ -69,17 +69,29 @@ def show_random_books():
     # Losowanie książek dla każdego modelu
     random_logreg_books, random_rf_books, random_knn_books = predict_books(models, books_df, test_features, y_test)
 
-    columns_to_show = ['title', 'author', 'number_of_people_has', 'description', 'ISBN']
+    long_description = 75
+
+    random_logreg_description_is_long = random_logreg_books['description'].str.len() > long_description
+    random_rf_description_is_long = random_rf_books['description'].str.len() > long_description
+    random_knn_description_is_long = random_knn_books['description'].str.len() > long_description
+    random_logreg_books.loc[random_logreg_description_is_long, 'short_description'] = random_logreg_books.loc[random_logreg_description_is_long, 'description'].str[:200] + '...'
+    random_logreg_books.loc[~random_logreg_description_is_long, 'short_description'] = random_logreg_books.loc[~random_logreg_description_is_long, 'description']
+    random_rf_books.loc[random_rf_description_is_long, 'short_description'] = random_rf_books.loc[random_rf_description_is_long, 'description'].str[:200] + '...'
+    random_rf_books.loc[~random_rf_description_is_long, 'short_description'] = random_rf_books.loc[~random_rf_description_is_long, 'description']
+    random_knn_books.loc[random_knn_description_is_long, 'short_description'] = random_knn_books.loc[random_knn_description_is_long, 'description'].str[:200] + '...'
+    random_knn_books.loc[~random_knn_description_is_long, 'short_description'] = random_knn_books.loc[~random_knn_description_is_long, 'description']
+
+    columns_to_show = ['title', 'author', 'number_of_people_has', 'short_description']
 
     # Wyświetlanie losowo wybranych książek dla każdego modelu
-    st.subheader("Losowe książki według modelu Regresji Logistycznej")
-    st.write(random_logreg_books[columns_to_show])
+    st.subheader("Losowe 'niedocenione' książki według modelu Regresji Logistycznej")
+    st.markdown(random_logreg_books[columns_to_show].to_markdown(), unsafe_allow_html=True)
 
-    st.subheader("Losowe książki według modelu Random Forest")
-    st.write(random_rf_books[columns_to_show])
+    st.subheader("Losowe 'niedocenione' książki według modelu Random Forest")
+    st.markdown(random_rf_books[columns_to_show].to_markdown(), unsafe_allow_html=True)
 
-    st.subheader("Losowe książki według modelu KNN")
-    st.write(random_knn_books[columns_to_show])
+    st.subheader("Losowe 'niedocenione' książki według modelu KNN")
+    st.write(random_knn_books[columns_to_show].to_markdown(), unsafe_allow_html=True)
 
 if __name__ == "__main__":
     show_random_books()
